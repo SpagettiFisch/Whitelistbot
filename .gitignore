@@ -1,4 +1,4 @@
-/config/
+/config/config.json
 /data/
 /modules/__pycache__
 /whitelist/paths.txt
