@@ -94,4 +94,3 @@ async def syncWhitelistPterodactyl(whitelist):
 async def pterodactylWriteFile(serverid, path, data, apikey):
     url = f'{init.config().get_pterodactyl_domain()}api/client/servers/{serverid}/files/write?file={urllib.parse.quote(path)}'
     requests.post(url, data=data, headers={"Accept": "application/json", "Authorization": f"Bearer {apikey}"})
-    print('Whitelist abgeschickt')
