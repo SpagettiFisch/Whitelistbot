@@ -58,6 +58,17 @@ async def cmdmcname(ctx:slash.Context):
     else:
         await ctx.respond('Du hast deinen Minecraftnamen noch nicht hinzugefügt. Nutze `/mc [name]` um ihn hinzuzufügen.', ephemeral=True)
 
+async def cmdshutdown(ctx:slash.Context, bot):
+    if str(ctx.channel.id) == str(init.config().get_guild_admin_id()):
+        await ctx.respond('Logging out and initiating shutdown', ephemeral=True)
+        print('Start logging out')
+        await bot.logout()
+        bot.clear()
+        print('Log Out succesful\nExiting')
+        exit()
+    else:
+        await ctx.respond('You are not as mighty as you may think you are.')
+
 async def syncWhitelist():
     results = cur.execute("SELECT mcname, uuid, iswhitelisted FROM user")
     results = cur.fetchall()

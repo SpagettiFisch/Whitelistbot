@@ -23,11 +23,17 @@ if not path.exists('config/config.json'):
         pterodactyl_domain = input()
         print("Bitte geben Sie den Pterodactyl API Key ein (optional):")
         pterodactyl_api_key = input()
+        print("Bitte geben Sie die Guild ID ein:")
+        guild_id = input()
+        print("Bitte geben Sie die ID des Admin Channels ein:")
+        guild_admin_id = input()
 
         jsonstructure['discord'].append({
         'token': token,
         'pterodactyl_domain': pterodactyl_domain,
-        'pterodactyl_apikey': pterodactyl_api_key
+        'pterodactyl_apikey': pterodactyl_api_key,
+        'guild_id': guild_id,
+        'guild_admin_id': guild_admin_id
         })
 
     elif input1.lower().strip() == 'n':
@@ -35,7 +41,9 @@ if not path.exists('config/config.json'):
         jsonstructure['discord'].append({
         'token': 'Platzhalter',
         'pterodactyl_domain': '',
-        'pterodactyl_apikey': ''
+        'pterodactyl_apikey': '',
+        'guild_id': '',
+        'guild_admin_id': ''
         })
 
     else:

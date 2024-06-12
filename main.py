@@ -11,6 +11,7 @@ from discord.ext import slash
 token = init.config().get_token()
 domain = init.config().get_pterodactyl_domain()
 apikey = init.config().get_pterodactyl_apikey()
+guild_id = init.config().get_guild_id()
 
 bot = slash.SlashBot(command_prefix='!', help_command=None)
 # msg_opt = slash.Option(description="Dein Minecraft Name", , required=True)
@@ -34,5 +35,10 @@ async def mc(ctx:slash.Context, name:slash.Option(description="Dein Minecraftnam
 async def mcname(ctx:slash.Context):
     "Gibt deinen aktuellen Minecraft Namen an"
     await functions.cmdmcname(ctx)
+
+@bot.slash_cmd(guild_id=guild_id, hidden=True)
+async def shutdown(ctx:slash.Context):
+    "Will shutdown the bot if you are mighty enough."
+    await functions.cmdshutdown(ctx, bot)
 
 bot.run(token)
