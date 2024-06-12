@@ -1,3 +1,5 @@
+<h1>Original Code https://github.com/Blizzor/blizzbot</h1>
+
 <b>For setup:</b><br>
     Run the setup.py file and follow the instructions.
     After this you should find some file named /whitelist/pterodactyl.txt there you need to insert the server id(s) of the server(s) you want to sync the whitelist with and the path for the whitelist (should be 'whitelist.json' for Minecraft). The server's id is the first part of its UUID / Docker Container ID or just https://[your-panel-url]/server/[this part] on its dashboard site.
