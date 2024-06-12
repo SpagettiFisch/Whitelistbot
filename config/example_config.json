@@ -1,0 +1,9 @@
+{
+    "discord": [
+        {
+            "token": "discord bot token",
+            "pterodactyl_domain": "https://panel.pterodactyl.com/",
+            "pterodactyl_apikey": "user api key"
+        }
+    ]
+}
