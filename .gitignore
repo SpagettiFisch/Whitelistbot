@@ -1,4 +1,6 @@
 /config/
 /data/
 /modules/__pycache__
-/whitelist/
+/whitelist/paths.txt
+/whitelist/pterodactyl.txt
+/whitelist/whitelist.json
