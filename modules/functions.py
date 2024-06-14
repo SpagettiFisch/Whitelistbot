@@ -11,6 +11,8 @@ from discord.ext import slash
 from modules import init
 
 con, cur = init.getdb()
+mod_roles = init.config().get_mod_roles()
+admin_roles = init.config().get_admin_roles()
 
 async def cmdhelp(ctx:slash.Context):
     embed = discord.Embed(title="Hilfe",
@@ -37,7 +39,8 @@ async def cmdmc(ctx:slash.Context, name:str, client):
             cur.execute(f"UPDATE user SET mcname = '{mcinfo['name']}', uuid = '{uuid}' WHERE id = {ctx.author.id}")
             await ctx.respond(f'Dein Minecraftname **{name}** wurde erfolgreich aktualisiert.')
         else:
-            cur.execute(f"INSERT INTO user VALUES ({ctx.author.id}, '{ctx.author.nick}', '{ctx.author.avatar_url}', '{mcinfo['name']}', '{uuid}', {True})")
+            cur.execute(f"INSERT INTO user VALUES ({ctx.author.id}, '{ctx.author.nick}', '{ctx.author.avatar_url}', '{mcinfo['name']}', '{uuid}', {False
+                                                                                                                                                   })")
             await ctx.respond(f'Dein Minecraftname **{name}** wurde erfolgreich hinzugefügt.')
         con.commit()
         await syncWhitelist()
@@ -68,6 +71,25 @@ async def cmdshutdown(ctx:slash.Context, bot):
         exit()
     else:
         await ctx.respond('You are not as mighty as you may think you are.')
+
+async def cmdallow(ctx:slash.Context, user:str, bot:discord.ext.commands.Bot):
+    user_id = user.removeprefix('<@').removesuffix('>')
+    try:
+        user = str(await bot.fetch_user(user_id)).removesuffix('#0')
+    except:
+        await ctx.respond(f"Eingabe ungültig. \nErhaltene Eingabe: **{user}**. Es wurde **@<username>** oder **<Nutzer id>** erwartet. \nBitte versuche es erneut.", ephemeral=True)
+        return
+
+    result = cur.execute(f"SELECT * FROM user WHERE id = '{user_id}'")
+    result = cur.fetchone()
+
+    if result:
+        cur.execute(f"UPDATE user SET iswhitelisted = {True} WHERE id = '{user_id}'")
+        con.commit()
+        await ctx.respond(f'Der Nutzer **{user}** wurde erfolgreich gewhitelisted.')
+        await syncWhitelist()
+    else:
+        await ctx.respond(f'Der Nutzer **{user}** existiert nicht im System. Damit er vom System registriert wird, muss er zunächst seinen Minecraftnamen hinzufügen.', ephemeral=True)
 
 async def syncWhitelist():
     results = cur.execute("SELECT mcname, uuid, iswhitelisted FROM user")
@@ -105,3 +127,35 @@ async def syncWhitelistPterodactyl(whitelist):
 async def pterodactylWriteFile(serverid, path, data, apikey):
     url = f'{init.config().get_pterodactyl_domain()}api/client/servers/{serverid}/files/write?file={urllib.parse.quote(path)}'
     requests.post(url, data=data, headers={"Accept": "application/json", "Authorization": f"Bearer {apikey}"})
+
+async def isMod(ctx:slash.Context, bot):
+    allowed = False
+    for id in mod_roles:
+        guild = bot.get_guild(ctx.guild.id)
+        role = guild.get_role(id)
+        member = await guild.fetch_member(ctx.author.id)
+        if role in member.roles:
+            allowed = True
+            break
+
+    if allowed:
+        return True
+    else:
+        await ctx.respond("Du hast nicht die nötigen Rechte um diesen Befehl auszuführen.", ephemeral=True) #You are not allowed to perform this command
+        return 
+    
+async def isAdmin(ctx:slash.Context, bot):
+    allowed = False
+    for id in admin_roles:
+        guild = bot.get_guild(ctx.guild.id)
+        role = guild.get_role(id)
+        member = await guild.fetch_member(ctx.author.id)
+        if role in member.roles:
+            allowed = True
+            break
+
+    if allowed:
+        return True
+    else:
+        await ctx.respond("You are not mighty enough to perform this operation.", ephemeral=True)
+        return 

@@ -11,34 +11,41 @@ from discord.ext import slash
 token = init.config().get_token()
 domain = init.config().get_pterodactyl_domain()
 apikey = init.config().get_pterodactyl_apikey()
-guild_id = init.config().get_guild_id()
 
 bot = slash.SlashBot(command_prefix='!', help_command=None)
-# msg_opt = slash.Option(description="Dein Minecraft Name", , required=True)
 
 @bot.event
 async def on_ready():
-    print('Bot wurde gestartet')
+    print('Bot started succesfully')
     return
 
 @bot.slash_cmd(aliases=["hilfe"])
 async def help(ctx:slash.Context):
-    "Hilfe für alle verwendbaren Befehle"
+    "Hilfe für alle verwendbaren Befehle" #Help for all usable commands
     await functions.cmdhelp(ctx)
 
-@bot.slash_cmd(aliases=["minecraft"], guild_id=1210285934248198244)
-async def mc(ctx:slash.Context, name:slash.Option(description="Dein Minecraftname", required=True)):
-    "Registriere deinen Minecraft Namen"
+@bot.slash_cmd(aliases=["minecraft"])
+async def mc(ctx:slash.Context, name:slash.Option(description="Dein Minecraftname", required=True)): #Your Minecraft name
+    "Registriere deinen Minecraft Namen" #Register your Minecraft name
     await functions.cmdmc(ctx, name.strip(), bot)
 
 @bot.slash_cmd()
 async def mcname(ctx:slash.Context):
-    "Gibt deinen aktuellen Minecraft Namen an"
+    "Gibt deinen aktuellen Minecraft Namen an" #Outputs your linked Minecraft name
     await functions.cmdmcname(ctx)
 
-@bot.slash_cmd(guild_id=guild_id, hidden=True)
+@bot.slash_cmd()
 async def shutdown(ctx:slash.Context):
     "Will shutdown the bot if you are mighty enough."
-    await functions.cmdshutdown(ctx, bot)
+    if await functions.isAdmin(ctx, bot):
+        await functions.cmdshutdown(ctx, bot)
+
+@bot.slash_cmd(guild_id=1210285934248198244)
+async def allow(ctx:slash.Context, user:slash.Option(description="der zu whitelistene Nutzuer (@<Discordname>)", required=True)):
+    "Fügt Spieler der Whitelist hinzu." #Add Players to whitelist
+    if await functions.isMod(ctx, bot):
+        await functions.cmdallow(ctx, user.strip(), bot)
+
+
 
 bot.run(token)

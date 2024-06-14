@@ -11,8 +11,8 @@ class config():
                 self.token = p['token']
                 self.pterodactyl_domain = p['pterodactyl_domain']
                 self.pterodactyl_apikey = p['pterodactyl_apikey']
-                self.guild_id = p['guild_id']
-                self.guild_admin_id = p['guild_admin_id']
+                self.mod_roles = p['mod_roles']
+                self.admin_roles = p['admin_roles']
 
     def get_token(self):
         return self.token
@@ -20,10 +20,10 @@ class config():
         return self.pterodactyl_domain
     def get_pterodactyl_apikey(self):
         return self.pterodactyl_apikey
-    def get_guild_id(self):
-        return self.guild_id
-    def get_guild_admin_id(self):
-        return self.guild_admin_id
+    def get_mod_roles(self):
+        return self.mod_roles
+    def get_admin_roles(self):
+        return self.admin_roles
     
 
 con = sqlite3.connect('data/database.sqlite')
