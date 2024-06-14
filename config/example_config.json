@@ -4,8 +4,8 @@
             "token": "discord bot token",
             "pterodactyl_domain": "https://panel.pterodactyl.com/",
             "pterodactyl_apikey": "user api key",
-            "guild_id": "169256939211980800",
-            "guild_admin_id": "169256939211980800"
+            "mod_roles": [273600757264023553, 1168422950685384765, 286965023249793046],
+            "admin_roles": [807336816863739925]
         }
     ]
 }
