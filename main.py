@@ -46,6 +46,4 @@ async def allow(ctx:slash.Context, user:slash.Option(description="der zu whiteli
     if await functions.isMod(ctx, bot):
         await functions.cmdallow(ctx, user.strip(), bot)
 
-
-
 bot.run(token)

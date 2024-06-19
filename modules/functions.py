@@ -3,6 +3,7 @@ import json
 import requests
 import urllib
 import random
+import asyncio
 
 from os import path
 from shutil import copyfile
@@ -67,6 +68,7 @@ async def cmdshutdown(ctx:slash.Context, bot):
         print('Start logging out')
         await bot.logout()
         bot.clear()
+        asyncio.run(bot.close())
         print('Log Out succesful\nExiting')
         exit()
     else:
